@@ -94,8 +94,9 @@ stream = client.chat.completions.create(
     messages=[{"role": "user", "content": "Say this is a test"}],
     stream=True,
 )
-for part in stream:
-    print(part.choices[0].delta.content or "")
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(part.choices[0].delta.content)
 ```
 
 The async client uses the exact same interface.
@@ -110,8 +111,9 @@ stream = await client.chat.completions.create(
     messages=[{"role": "user", "content": "Say this is a test"}],
     stream=True,
 )
-async for part in stream:
-    print(part.choices[0].delta.content or "")
+async for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(part.choices[0].delta.content)
 ```
 
 ## Module-level client
@@ -250,7 +252,7 @@ completion = client.chat.completions.create(
             "content": "Can you generate an example json object describing a fruit?",
         }
     ],
-    model="gpt-3.5-turbo",
+    model="gpt-3.5-turbo-1106",
     response_format={"type": "json_object"},
 )
 ```
